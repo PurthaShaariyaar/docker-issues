@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: authe-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: authe
+  template:
+    metadata:
+      labels:
+        app: authe
+    spec:
+      containers:
+        - name: authe
+          image: purthas/authe
+          env:
+            - name: MONGO_URI
+              value: 'mongodb://authe-mongo-srv:27017/authe'
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: authe-srv
+spec:
+  selector:
+    app: authe
+  ports:
+    - name: authe
+      protocol: TCP
+      port: 4000
+      targetPort: 4000
